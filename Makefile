@@ -2,14 +2,15 @@ NAME = RTv1
 
 FLAGS = -c -O3
 
-MLXFLAGS = -lmlx -framework OpenGL -framework AppKit -O3
+MLXFLAGS = -lmlx -framework OpenGL -framework OpenCL -framework AppKit -O3
 
-SOURCES = events.c \
-		  initialization.c \
+SOURCES = initialization.c \
+		  initialization_cl.c \
 		  main.c \
-		  math_vec.c \
-		  sphere.c \
-		  utilits.c
+		  sphere.c 
+
+UTILITS = color.c \
+		  math_vec.c
 
 INCLUDES = $(addprefix -I, ./includes)
 
@@ -19,9 +20,13 @@ DIR_O = objs
 
 DIR_S = srcs
 
+DIR_U = utilits
+
 SRCS = $(addprefix $(DIR_S)/,$(SOURCES))
 
 OBJS = $(addprefix $(DIR_O)/,$(SOURCES:.c=.o))
+
+UTLS = $(addprefix $(DIR_O)/,$(UTILITS:.c=.o))
 
 all: $(LIB) $(NAME)
 
@@ -29,10 +34,14 @@ $(LIB):
 			@echo "\x1b[35;01mCompilation Lib and binary\x1b[32;01m"
 			@make -C ./libft
 
-$(NAME):	$(OBJS)
-			gcc -I /usr/local/include $(OBJS) $(LIB) -L /usr/local/lib/ $(MLXFLAGS) -o $(NAME)
+$(NAME):	$(OBJS) $(UTLS)
+			gcc -I /usr/local/include $(OBJS) $(UTLS) $(LIB) -L /usr/local/lib/ $(MLXFLAGS) -o $(NAME)
 
 $(OBJS):	$(DIR_O)/%.o: $(DIR_S)/%.c includes/config.h
+			@mkdir -p $(DIR_O)
+			gcc $(FLAGS) $(INCLUDES) -o $@ $<
+
+$(UTLS):	$(DIR_O)/%.o: $(DIR_U)/%.c includes/config.h
 			@mkdir -p $(DIR_O)
 			gcc $(FLAGS) $(INCLUDES) -o $@ $<
 

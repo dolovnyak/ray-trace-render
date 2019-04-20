@@ -2,6 +2,7 @@
 # define RTV1_H
 
 #include "math_vec.h"
+#include "utilits.h"
 
 typedef struct	s_sphere
 {
@@ -31,8 +32,8 @@ typedef struct	s_lights
  */
 
 t_object3d	new_obj_sphere(const t_vector3d center, const float radius, const t_color color);
-int			get_intersect_sphere(t_sphere sphere, const t_vector3d camera,
-		const t_vector3d canvas_cell, float *intersect_dist);
+int			get_intersect_sphere(t_sphere sphere, const t_vector3d cam_ray_start,
+		const t_vector3d can_ray, float *intersect_dist);
 t_vector3d	get_normal_vector_sphere(t_sphere sphere, const t_vector3d intersection_point);
 
 #endif

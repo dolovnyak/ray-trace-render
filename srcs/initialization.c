@@ -6,35 +6,29 @@
 /*   By: sbecker <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 04:47:49 by sbecker           #+#    #+#             */
-/*   Updated: 2019/04/19 16:30:41 by sbecker          ###   ########.fr       */
+/*   Updated: 2019/04/19 18:36:52 by sbecker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "config.h"
 
-void    initialization_mlx(t_conf *conf)
+void    initialization_mlx(t_mlx *mlx)
 {
-	t_mlx	mlx;
-
-	mlx.width = 1200;
-	mlx.height = 1200;
-	mlx.mlx = mlx_init();
-	mlx.win = mlx_new_window(mlx.mlx, mlx.width, mlx.height, "fractol");
-	mlx.img_ptr = mlx_new_image(mlx.mlx, mlx.width, mlx.height);
-	mlx.img_data = mlx_get_data_addr(mlx.img_ptr, &mlx.bpp, &mlx.size_line, &mlx.endian);
-	conf->mlx = mlx;
+	mlx->width = 1200;
+	mlx->height = 1200;
+	mlx->mlx = mlx_init();
+	mlx->win = mlx_new_window(mlx->mlx, mlx->width, mlx->height, "ray-trace");
+	mlx->img_ptr = mlx_new_image(mlx->mlx, mlx->width, mlx->height);
+	mlx->img_data = mlx_get_data_addr(mlx->img_ptr, &mlx->bpp, &mlx->size_line, &mlx->endian);
 }
 
-void	initialization_canvas(t_conf *conf)
+void	initialization_canvas(t_canvas *canvas)
 {
-	t_canvas	canvas;
-
-	canvas.width = 1;
-	canvas.height = 1;
-	canvas.nigh_distance = 1;
-	canvas.far_distance = 9999999;
-	canvas.camera = (mv_get_vector3d(0, 0, 0));
-	conf->canvas = canvas;
+	canvas->width = 1;
+	canvas->height = 1;
+	canvas->nigh_distance = 1;
+	canvas->far_distance = 9999999;
+	canvas->camera = (mv_get_vector3d(0, 0, 0));
 }
 
 t_lights	new_light_ambient(float intensity)

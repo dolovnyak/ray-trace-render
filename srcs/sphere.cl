@@ -3,7 +3,7 @@
 int		get_intersect_sphere(t_sphere sphere, const t_vector3d cam_ray_start,
 		const t_vector3d cam_ray, float *intersect_dist)
 {
-/*	float		intersect_dist1;
+	float		intersect_dist1;
 	float		intersect_dist2;
 	float		k1, k2, k3;
 	float		r;
@@ -26,14 +26,14 @@ int		get_intersect_sphere(t_sphere sphere, const t_vector3d cam_ray_start,
 	discriminant = k2 * k2 - 4 * k1 * k3;
 	if (discriminant < 0)
 		return(0);
-	intersect_dist1 = (-k2 + sqrtf(discriminant)) / (2 * k1);
-	intersect_dist2 = (-k2 - sqrtf(discriminant)) / (2 * k1);
+	intersect_dist1 = (-k2 + sqrt(discriminant)) / (2 * k1);
+	intersect_dist2 = (-k2 - sqrt(discriminant)) / (2 * k1);
 	if (intersect_dist1 < *intersect_dist && intersect_dist1 > 1) //вместо 1 - поставить дистанцию камеры
 		*intersect_dist = intersect_dist1;
 	if (intersect_dist2 < *intersect_dist && intersect_dist2 > 1) //вместо 1 - поставить дистанцию камеры
 		*intersect_dist = intersect_dist2;
 	if (*intersect_dist == intersect_tmp)
-		return (0);*/
+		return (0);
 	return (1);
 }
 

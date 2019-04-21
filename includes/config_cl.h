@@ -26,5 +26,10 @@ typedef struct	s_conf
 
 t_vector3d	get_cam_ray(int x, int y, t_canvas canvas, int width, int height);
 t_color		ray_trace(t_conf *conf);
+int			get_intersect(t_object3d obj, t_vector3d camera, t_vector3d cam_ray, float *intersect_dist);
+float       find_intersect(t_conf *conf, t_object3d *closest_obj);
+float       get_light_intensity(t_object3d *obj, t_vector3d intersect_point, t_conf *conf);
+t_vector3d  get_normal_vector(t_object3d *obj, t_vector3d intersect_point);
+void        put_pixel(int x, int y, t_color color, __global char* img, int width, int height);
 
 #endif

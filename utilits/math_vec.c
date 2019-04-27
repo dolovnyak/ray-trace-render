@@ -1,4 +1,5 @@
 #include "math_vec.h"
+#include <math.h>
 
 t_vector3d	mv_minus(const t_vector3d A, const t_vector3d B)
 {
@@ -56,4 +57,12 @@ t_vector3d  mv_get_vector3d(float x, float y, float z)
 	vec.y = y;
 	vec.z = z;
 	return (vec);
+}
+
+float		mv_length(const t_vector3d A)
+{
+	float	length;
+
+	length = sqrt(A.x * A.x + A.y * A.y + A.z * A.z);
+	return (length);
 }

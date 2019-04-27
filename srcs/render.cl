@@ -29,6 +29,7 @@ __kernel void render(__global char* img, int width, int height, int objects_num,
 	conf.objects = objects;
 	conf.lights = lights;
 	conf.cam_ray = get_cam_ray(gid % width, gid / width, canvas, width, height);
+	conf.scalar_cam_ray = mv_scalar_mult(conf.cam_ray, conf.cam_ray);
 	color = ray_trace(&conf);
 	put_pixel(gid % width, gid / width, color, img, width, height);
 }

@@ -6,7 +6,7 @@
 /*   By: sbecker <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 02:46:07 by sbecker           #+#    #+#             */
-/*   Updated: 2019/04/19 18:56:17 by sbecker          ###   ########.fr       */
+/*   Updated: 2019/04/27 00:36:03 by sbecker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ void		initialization_mlx(t_mlx *mlx);
 void		initialization_canvas(t_canvas *canvas);
 void		initialization_scene(t_conf *conf);
 void		initialization_cl(t_cl *cl);
-int			keyboard_events(int keycode, t_conf *conf);
-t_vector3d	get_cam_ray(int x, int y, t_conf *conf);
+int			key_press(int keycode, t_conf *conf);
+int			exit_event(void *param);
+int			refresh(t_conf *conf); //TODO
 
 #endif

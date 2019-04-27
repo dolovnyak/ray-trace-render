@@ -7,7 +7,9 @@ MLXFLAGS = -lmlx -framework OpenGL -framework OpenCL -framework AppKit -O3
 SOURCES = initialization.c \
 		  initialization_cl.c \
 		  main.c \
-		  sphere.c 
+		  create_objects.c \
+		  keyboard_events.c \
+		  mouse_events.c
 
 UTILITS = color.c \
 		  math_vec.c

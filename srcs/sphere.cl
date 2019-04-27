@@ -1,36 +1,60 @@
 #include "config_cl.h"
 
-int		get_intersect_sphere(t_sphere sphere, const t_vector3d cam_ray_start,
-		const t_vector3d cam_ray, float *intersect_dist)
+int		get_intersect_sphere(t_sphere sphere, t_conf *conf, float *intersect_dist, float min_distance)
 {
 	float		intersect_dist1;
 	float		intersect_dist2;
 	float		k1, k2, k3;
-	float		r;
-	t_vector3d	C;
 	t_vector3d	OC;
-	t_vector3d	D;
 	float		discriminant;
+	float		sq_discriminant;
 	float		intersect_tmp;
 
 	intersect_tmp = *intersect_dist;
-	intersect_dist1 = 1000;
-	intersect_dist2 = 1000;
-	D = cam_ray;
-	C = sphere.center;
-	r = sphere.radius;
-	OC = mv_minus(cam_ray_start, C);
-	k1 = mv_scalar_mult(D, D);
-	k2 = 2 * mv_scalar_mult(OC, D);
-	k3 = mv_scalar_mult(OC, OC) - r * r;
+	OC = mv_minus(conf->canvas.camera, sphere.center);
+	k1 = conf->scalar_cam_ray;
+	k2 = 2 * mv_scalar_mult(OC, conf->cam_ray);
+	k3 = mv_scalar_mult(OC, OC) - sphere.sq_radius;
 	discriminant = k2 * k2 - 4 * k1 * k3;
 	if (discriminant < 0)
 		return(0);
-	intersect_dist1 = (-k2 + sqrt(discriminant)) / (2 * k1);
-	intersect_dist2 = (-k2 - sqrt(discriminant)) / (2 * k1);
-	if (intersect_dist1 < *intersect_dist && intersect_dist1 > 1) //вместо 1 - поставить дистанцию камеры
+	sq_discriminant = sqrt(discriminant);
+	intersect_dist1 = (-k2 + sq_discriminant) / (2 * k1);
+	intersect_dist2 = (-k2 - sq_discriminant) / (2 * k1);
+	if (intersect_dist1 < *intersect_dist && intersect_dist1 > min_distance)
 		*intersect_dist = intersect_dist1;
-	if (intersect_dist2 < *intersect_dist && intersect_dist2 > 1) //вместо 1 - поставить дистанцию камеры
+	if (intersect_dist2 < *intersect_dist && intersect_dist2 > min_distance)
+		*intersect_dist = intersect_dist2;
+	if (*intersect_dist == intersect_tmp)
+		return (0);
+	return (1);
+}
+
+int		get_intersect_sphere_for_shadows(t_sphere sphere, t_vector3d start_point_ray,
+			t_vector3d ray, float *intersect_dist, float min_distance)
+{
+	float		intersect_dist1;
+	float		intersect_dist2;
+	float		k1, k2, k3;
+	t_vector3d	OC;
+	float		discriminant;
+	float		sq_discriminant;
+	float		intersect_tmp;
+
+	intersect_tmp = *intersect_dist;
+	OC = mv_minus(start_point_ray, sphere.center);
+	k1 = mv_scalar_mult(ray, ray);
+	k2 = 2 * mv_scalar_mult(OC, ray);
+	k3 = mv_scalar_mult(OC, OC) - sphere.sq_radius;
+	discriminant = k2 * k2 - 4 * k1 * k3;
+	if (discriminant < 0)
+		return(0);
+	sq_discriminant = sqrt(discriminant);
+	intersect_dist1 = (-k2 + sq_discriminant) / (2 * k1);
+	intersect_dist2 = (-k2 - sq_discriminant) / (2 * k1);
+	if (intersect_dist1 < *intersect_dist && intersect_dist1 > min_distance)
+		*intersect_dist = intersect_dist1;
+	if (intersect_dist2 < *intersect_dist && intersect_dist2 > min_distance)
 		*intersect_dist = intersect_dist2;
 	if (*intersect_dist == intersect_tmp)
 		return (0);

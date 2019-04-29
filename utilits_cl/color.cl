@@ -33,3 +33,13 @@ t_color		rgb_mult_num(t_color rgb, float num)
 	rgb.b = rgb.b > 255 ? 255 : rgb.b;
 	return (rgb);
 }
+
+t_color     rgb_plus(t_color rgb1, t_color rgb2)
+{
+    t_color new_rgb;
+
+    new_rgb.r = rgb1.r + rgb2.r;
+    new_rgb.g = rgb1.g + rgb2.g;
+    new_rgb.b = rgb1.b + rgb2.b;
+    return (new_rgb);
+}

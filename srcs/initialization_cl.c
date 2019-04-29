@@ -6,7 +6,7 @@
 /*   By: sbecker <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/31 22:06:08 by sbecker           #+#    #+#             */
-/*   Updated: 2019/04/21 12:39:33 by sbecker          ###   ########.fr       */
+/*   Updated: 2019/04/29 22:20:29 by sbecker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ cl_program	create_program(cl_context context)
 	int			files_num;
 	int			err;
 
-	files_num = 7;
+	files_num = 8;
 	program_buf = (char**)malloc(sizeof(char*) * files_num);
 	program_size = (size_t*)malloc(sizeof(size_t) * files_num);
 	program_buf[0] = get_program_buf("utilits_cl/math_vec.cl", &program_size[0]);
@@ -65,6 +65,7 @@ cl_program	create_program(cl_context context)
 	program_buf[4] = get_program_buf("srcs/ray-trace.cl", &program_size[4]);
 	program_buf[5] = get_program_buf("srcs/sphere.cl", &program_size[5]);
 	program_buf[6] = get_program_buf("srcs/get_light_intensity.cl", &program_size[6]);
+	program_buf[7] = get_program_buf("srcs/check_shadows.cl", &program_size[7]);
 	program = clCreateProgramWithSource(context, files_num,
 			(const char**)program_buf, (const size_t*)program_size, &err);
 	if (err != 0)

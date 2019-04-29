@@ -6,7 +6,7 @@
 /*   By: sbecker <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 18:14:31 by sbecker           #+#    #+#             */
-/*   Updated: 2019/04/27 02:59:33 by sbecker          ###   ########.fr       */
+/*   Updated: 2019/04/29 22:17:03 by sbecker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ int		main(void)
 	refresh(&conf);
 	mlx_hook(conf.mlx.win, 2, 0, &key_press, &conf);
 	mlx_hook(conf.mlx.win, 17, 0, &exit_event, (void*)0);
-//	mlx_loop_hook(conf.mlx.mlx, &refresh, &conf);
 	mlx_loop(conf.mlx.mlx);
 	return (0);
 }

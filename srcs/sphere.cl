@@ -1,6 +1,7 @@
 #include "config_cl.h"
 
-int		get_intersect_sphere(t_sphere sphere, t_conf *conf, float *intersect_dist, float min_distance)
+int		get_intersect_sphere(t_vector3d start_ray, t_vector3d ray, t_sphere sphere,
+			float *intersect_dist, float min_distance, float scalar_ray_for_optimize)
 {
 	float		intersect_dist1;
 	float		intersect_dist2;
@@ -11,9 +12,9 @@ int		get_intersect_sphere(t_sphere sphere, t_conf *conf, float *intersect_dist, 
 	float		intersect_tmp;
 
 	intersect_tmp = *intersect_dist;
-	OC = mv_minus(conf->canvas.camera, sphere.center);
-	k1 = conf->scalar_cam_ray;
-	k2 = 2 * mv_scalar_mult(OC, conf->cam_ray);
+	OC = mv_minus(start_ray, sphere.center);
+	k1 = scalar_ray_for_optimize;
+	k2 = 2 * mv_scalar_mult(OC, ray);
 	k3 = mv_scalar_mult(OC, OC) - sphere.sq_radius;
 	discriminant = k2 * k2 - 4 * k1 * k3;
 	if (discriminant < 0)
@@ -30,8 +31,8 @@ int		get_intersect_sphere(t_sphere sphere, t_conf *conf, float *intersect_dist, 
 	return (1);
 }
 
-int		get_intersect_sphere_for_shadows(t_sphere sphere, t_vector3d start_point_ray,
-			t_vector3d ray, float *intersect_dist, float min_distance)
+int		get_intersect_sphere_for_shadows(t_vector3d start_ray, t_vector3d ray,
+			t_sphere sphere, float *intersect_dist, float min_distance)
 {
 	float		intersect_dist1;
 	float		intersect_dist2;
@@ -42,7 +43,7 @@ int		get_intersect_sphere_for_shadows(t_sphere sphere, t_vector3d start_point_ra
 	float		intersect_tmp;
 
 	intersect_tmp = *intersect_dist;
-	OC = mv_minus(start_point_ray, sphere.center);
+	OC = mv_minus(start_ray, sphere.center);
 	k1 = mv_scalar_mult(ray, ray);
 	k2 = 2 * mv_scalar_mult(OC, ray);
 	k3 = mv_scalar_mult(OC, OC) - sphere.sq_radius;

@@ -6,7 +6,7 @@
 /*   By: sbecker <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 02:46:07 by sbecker           #+#    #+#             */
-/*   Updated: 2019/04/27 00:36:03 by sbecker          ###   ########.fr       */
+/*   Updated: 2019/04/29 22:17:11 by sbecker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ typedef struct	s_mlx
 	int     height;
 }				t_mlx;
 
-typedef struct  s_canvas  //потом это будет камерой
+typedef struct  s_canvas
 {
 	float       width;
 	float       height;
-	float       nigh_distance;
-	float		far_distance;
+	float       min_distance;
+	float		max_distance;
 	t_vector3d  camera;
 }               t_canvas;
 

@@ -16,6 +16,8 @@ typedef struct	s_object3d
 	int			type;
 	t_color		color;
 	int			smoothness;
+	float		reflectivity;
+	int			light_source;
 	t_sphere	sphere;
 }				t_object3d;
 
@@ -34,7 +36,8 @@ typedef struct	s_lights
  * 3 - directional
  */
 
-t_object3d	new_obj_sphere(const t_vector3d center, const float radius, const t_color color, const int smoothness);
+t_object3d	new_obj_sphere(const t_vector3d center, const float radius, const t_color color,
+		const int smoothness, int light_source, float reflectivity);
 t_vector3d	get_normal_vector_sphere(t_sphere sphere, const t_vector3d intersection_point);
 
 #endif

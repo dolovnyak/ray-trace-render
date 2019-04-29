@@ -6,7 +6,7 @@
 /*   By: sbecker <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 03:01:47 by sbecker           #+#    #+#             */
-/*   Updated: 2019/04/11 10:15:55 by sbecker          ###   ########.fr       */
+/*   Updated: 2019/04/29 01:32:44 by sbecker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ typedef struct  s_color
 
 t_color     get_rgb(int r, int g, int b);
 t_color		rgb_mult_num(t_color rgb, float num);
+t_color		rgb_plus(t_color rgb1, t_color rgb2);
 
 #endif

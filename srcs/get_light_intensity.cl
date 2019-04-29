@@ -1,43 +1,38 @@
 #include "config_cl.h"
 
-t_vector3d  get_normal_vector(t_object3d *obj, t_vector3d intersect_point)
-{
-	if (obj->type == 1)
-		return (get_normal_vector_sphere(obj->sphere, intersect_point));
-	return (mv_get_vector3d(0, 0, 0));
-}
-
-void		get_reflection(int smoothness, t_vector3d *N, t_vector3d *cam, float *intensity, t_lights light)
+void		get_reflection(int smoothness, t_vector3d N, t_vector3d negative_ray,
+				float *intensity, t_lights light)
 {
 	t_vector3d	reflection_ray;
+	float		scalar_neg_reflect_ray;
 
 	if (smoothness != -1)
 	{
-		reflection_ray = mv_minus(mv_mult_num(mv_mult_num(*N, 2),
-				mv_scalar_mult(*N, light.direction)), light.direction);
-		if (mv_scalar_mult(*cam, reflection_ray) > 0)
-			*intensity += light.intensity * pow(mv_scalar_mult(*cam, reflection_ray) /
-					(mv_length(reflection_ray) * mv_length(*cam)), smoothness);
+		reflection_ray = mv_minus(mv_mult_num(mv_mult_num(N, 2),
+							mv_scalar_mult(N, light.direction)), light.direction);
+		scalar_neg_reflect_ray = mv_scalar_mult(negative_ray, reflection_ray);
+		if (scalar_neg_reflect_ray > 0)
+			*intensity += light.intensity * pow(scalar_neg_reflect_ray /
+					(mv_length(reflection_ray) * mv_length(negative_ray)), smoothness);
 	}
 }
 
-float       get_light_intensity(t_object3d *obj, t_vector3d intersect_point, t_conf *conf)
+float       get_light_intensity(t_object3d *obj, t_vector3d intersect_point,
+				t_scene *scene, t_vector3d ray, t_vector3d N)
 {
-	float	max_coef_ray_point;
-	t_vector3d	cam;
-	t_vector3d  N;
+	float		max_distance;
 	float       intensity;
 	float       intensity_tmp;
+	float		sqrt_scalar_N;
 	t_lights    light;
 	int         i;
 
-	cam = mv_mult_num(conf->cam_ray, -1);
-	N = get_normal_vector(obj, intersect_point);
 	intensity = 0.0;
 	i = -1;
-	while (++i < conf->lights_num)
+	sqrt_scalar_N = sqrt(mv_scalar_mult(N, N));
+	while (++i < scene->lights_num)
 	{
-		light = conf->lights[i];
+		light = scene->lights[i];
 		if (light.type == 1)
 			intensity += light.intensity;
 		else
@@ -45,29 +40,19 @@ float       get_light_intensity(t_object3d *obj, t_vector3d intersect_point, t_c
 			if (light.type == 2)
 			{
 				light.direction = mv_minus(light.position, intersect_point);
-				max_coef_ray_point = 1;
-				if (check_intersect_for_shadows(intersect_point, light.direction,
-					0.00001, max_coef_ray_point, conf) == 0)
-				{
-					 intensity_tmp = light.intensity * mv_scalar_mult(N, light.direction) /
-						(sqrt(mv_scalar_mult(N, N)) * sqrt(mv_scalar_mult(light.direction, light.direction)));
-					if (intensity_tmp > 0)
-						intensity += intensity_tmp;
-					get_reflection(obj->smoothness, &N, &cam, &intensity, light);
-				}
+				light.sqrt_scalar_direction = sqrt(mv_scalar_mult(light.direction, light.direction));
+				max_distance = 1;
 			}
 			else
+				max_distance = 999999;
+			if (check_intersect_for_shadows(intersect_point, light.direction,
+				0.001, max_distance, scene) == 0)
 			{
-				max_coef_ray_point = 999999;
-				if (check_intersect_for_shadows(intersect_point, light.direction,
-					0.00001, max_coef_ray_point, conf) == 0)
-				{
-					intensity_tmp = light.intensity * mv_scalar_mult(N, light.direction) /
-						(sqrt(mv_scalar_mult(N, N)) * light.sqrt_scalar_direction);
-					if (intensity_tmp > 0)
-						intensity += intensity_tmp;
-					get_reflection(obj->smoothness, &N, &cam, &intensity, light);
-				}
+				intensity_tmp = light.intensity * mv_scalar_mult(N, light.direction) /
+					(sqrt_scalar_N * light.sqrt_scalar_direction);
+				if (intensity_tmp > 0)
+					intensity += intensity_tmp;
+				get_reflection(obj->smoothness, N, mv_mult_num(ray, -1), &intensity, light);
 			}
 		}
 	}

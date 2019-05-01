@@ -6,7 +6,7 @@
 /*   By: sbecker <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 18:14:31 by sbecker           #+#    #+#             */
-/*   Updated: 2019/04/29 22:17:03 by sbecker          ###   ########.fr       */
+/*   Updated: 2019/05/01 05:52:39 by sbecker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,16 @@ void	get_mem_for_render(t_conf *conf, cl_mem *mem_img,
 		printf("create buffer - error\n");
 }
 
+void	get_math_optimization(t_conf *conf)
+{
+	conf->canvas.cos_x_rotate = cos(conf->canvas.x_rotation);
+	conf->canvas.sin_x_rotate = sin(conf->canvas.x_rotation);
+	conf->canvas.cos_y_rotate = cos(conf->canvas.y_rotation);
+	conf->canvas.sin_y_rotate = sin(conf->canvas.y_rotation);
+	conf->canvas.cos_z_rotate = cos(conf->canvas.z_rotation);
+	conf->canvas.sin_z_rotate = sin(conf->canvas.z_rotation);
+}
+
 int		refresh(t_conf *conf)
 {
 	cl_mem		mem_img;
@@ -67,6 +77,7 @@ int		refresh(t_conf *conf)
 	cl_mem		mem_lights;
 	int			err;
 
+	get_math_optimization(conf);
 	get_mem_for_render(conf, &mem_img, &mem_objects, &mem_lights);
 	run_render(conf, &mem_img, &mem_objects, &mem_lights);
 	mlx_clear_window(conf->mlx.mlx, conf->mlx.win);
@@ -85,6 +96,7 @@ int		main(void)
 	initialization_scene(&conf);
 	refresh(&conf);
 	mlx_hook(conf.mlx.win, 2, 0, &key_press, &conf);
+	mlx_hook(conf.mlx.win, 6, 0, &mouse_move, &conf);
 	mlx_hook(conf.mlx.win, 17, 0, &exit_event, (void*)0);
 	mlx_loop(conf.mlx.mlx);
 	return (0);

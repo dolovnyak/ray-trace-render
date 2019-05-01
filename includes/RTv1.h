@@ -30,6 +30,24 @@ typedef struct	s_lights
 	float		sqrt_scalar_direction;
 }				t_lights;
 
+typedef struct  s_canvas
+{
+	float       width;
+	float       height;
+	float       min_distance;
+	float       max_distance;
+	float       x_rotation;
+	float       y_rotation;
+	float       z_rotation;
+	float       cos_x_rotate;
+	float       sin_x_rotate;
+	float       cos_y_rotate;
+	float       sin_y_rotate;
+	float       cos_z_rotate;
+	float       sin_z_rotate;
+	t_vector3d  camera;
+}               t_canvas;
+
 /* types:
  * 1 - ambient
  * 2 - point

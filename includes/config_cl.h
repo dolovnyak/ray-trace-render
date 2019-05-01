@@ -13,15 +13,6 @@ typedef struct  s_reflection
 	float       reflectivity;
 }               t_reflection;
 
-typedef struct  s_canvas
-{
-	float       width;
-	float       height;
-	float       min_distance;
-	float       max_distance;
-	t_vector3d  camera;
-}               t_canvas;
-
 typedef struct	s_scene
 {
 	int						objects_num;
@@ -53,5 +44,7 @@ int			get_intersect_shadows(t_object3d *obj, t_vector3d intersect_point,
 int         check_intersect_for_shadows(t_vector3d intersect_point, t_vector3d direction,
 		float min_distance, float max_distance, t_scene *scene);
 t_vector3d	reflected_ray(t_vector3d ray, t_vector3d N);
+t_vector3d	rotation(t_vector3d A, float cos_x_rotate, float sin_x_rotate,
+		float cos_y_rotate, float sin_y_rotate, float cos_z_rotate, float sin_z_rotate);
 
 #endif

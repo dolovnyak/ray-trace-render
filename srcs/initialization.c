@@ -6,7 +6,7 @@
 /*   By: sbecker <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 04:47:49 by sbecker           #+#    #+#             */
-/*   Updated: 2019/04/29 23:46:29 by sbecker          ###   ########.fr       */
+/*   Updated: 2019/05/01 05:59:41 by sbecker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void    initialization_mlx(t_mlx *mlx)
 {
 	mlx->width = 2560;
-	mlx->height = 1440;
+	mlx->height = 1394;
 	mlx->mlx = mlx_init();
 	mlx->win = mlx_new_window(mlx->mlx, mlx->width, mlx->height, "ray-trace");
 	mlx->img_ptr = mlx_new_image(mlx->mlx, mlx->width, mlx->height);
@@ -24,10 +24,13 @@ void    initialization_mlx(t_mlx *mlx)
 
 void	initialization_canvas(t_canvas *canvas)
 {
-	canvas->width = 1.77777;
+	canvas->width = 1.8364418938;
 	canvas->height = 1;
 	canvas->min_distance = 1;
 	canvas->max_distance = 9999999;
+	canvas->x_rotation = 0;
+	canvas->y_rotation = 0;
+	canvas->z_rotation = 0;
 	canvas->camera = (mv_get_vector3d(0, 0, 0));
 }
 

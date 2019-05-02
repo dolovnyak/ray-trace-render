@@ -6,7 +6,7 @@
 /*   By: sbecker <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 18:31:12 by sbecker           #+#    #+#             */
-/*   Updated: 2019/05/01 06:00:38 by sbecker          ###   ########.fr       */
+/*   Updated: 2019/05/02 01:23:20 by sbecker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,13 @@
 int	key_press(int key, t_conf *conf)
 {
 	if (key == 12)
+		conf->flag_rotation_z_left = 1;
+	else if (key == 14)
+		conf->flag_rotation_z_right = 1;
+/*	if (key == 12)
 		conf->canvas.z_rotation += 0.05;
 	else if (key == 14)
-		conf->canvas.z_rotation -= 0.05;
+		conf->canvas.z_rotation -= 0.05;*/
 	else if (key == 13)
 		conf->canvas.camera.z += 0.5;
 	else if (key == 1)
@@ -37,5 +41,14 @@ int	key_press(int key, t_conf *conf)
 	else if (key == 53)
 		exit(0);
 	refresh(conf);
+	return (0);
+}
+
+int	key_release(int key, t_conf *conf)
+{
+	if (key == 12)
+		conf->flag_rotation_z_left = 0;
+	if (key == 14)
+		conf->flag_rotation_z_right = 0;
 	return (0);
 }

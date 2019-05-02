@@ -8,6 +8,7 @@ SOURCES = initialization.c \
 		  initialization_cl.c \
 		  main.c \
 		  create_objects.c \
+		  create_lights.c \
 		  keyboard_events.c \
 		  mouse_events.c
 

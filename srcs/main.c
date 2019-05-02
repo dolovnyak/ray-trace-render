@@ -6,7 +6,7 @@
 /*   By: sbecker <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 18:14:31 by sbecker           #+#    #+#             */
-/*   Updated: 2019/05/01 05:52:39 by sbecker          ###   ########.fr       */
+/*   Updated: 2019/05/02 02:15:12 by sbecker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,10 @@ int		refresh(t_conf *conf)
 	cl_mem		mem_lights;
 	int			err;
 
+	if (conf->flag_rotation_z_left == 1)
+		conf->canvas.z_rotation += 0.05;
+	if (conf->flag_rotation_z_right == 1)
+		conf->canvas.z_rotation -= 0.05;
 	get_math_optimization(conf);
 	get_mem_for_render(conf, &mem_img, &mem_objects, &mem_lights);
 	run_render(conf, &mem_img, &mem_objects, &mem_lights);
@@ -91,11 +95,12 @@ int		main(void)
 	t_conf		conf;
 
 	initialization_cl(&conf.cl);
-	initialization_mlx(&conf.mlx);
 	initialization_canvas(&conf.canvas);
 	initialization_scene(&conf);
+	initialization_mlx(&conf.mlx);
 	refresh(&conf);
 	mlx_hook(conf.mlx.win, 2, 0, &key_press, &conf);
+	mlx_hook(conf.mlx.win, 3, 0, &key_release, &conf);
 	mlx_hook(conf.mlx.win, 6, 0, &mouse_move, &conf);
 	mlx_hook(conf.mlx.win, 17, 0, &exit_event, (void*)0);
 	mlx_loop(conf.mlx.mlx);

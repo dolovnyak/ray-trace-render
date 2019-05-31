@@ -52,11 +52,13 @@ t_color     ray_trace(t_vector3d start_ray, t_vector3d ray, t_scene *scene)
 	float		scal_ray_for_optimize;
 	t_reflection reflection[DEPTH + 1];
 	int			count;
+	int			i;
 
+	i= -1;
 	count = 0;
-	int i = -1;
 	while (++i <= DEPTH)
 	{
+		++count;
 		scal_ray_for_optimize = mv_scalar_mult(ray, ray);
 		if ((intersect_dist = find_intersect(&start_ray, &ray, scene, &closest_obj, scal_ray_for_optimize)))
 		{
@@ -67,13 +69,15 @@ t_color     ray_trace(t_vector3d start_ray, t_vector3d ray, t_scene *scene)
 			reflection[i].local_color = color;
 			ray = reflected_ray(ray, normal);
 			start_ray = intersect_point;
-			++count;
 			if (closest_obj.reflectivity == 0)
 				break;
 			reflection[i].reflectivity = closest_obj.reflectivity;
 		}
 		else
+		{
+			reflection[i].local_color = get_rgb(0, 0, 0);
 			break;
+		}
 	}
 	if (count > 0)
 	{

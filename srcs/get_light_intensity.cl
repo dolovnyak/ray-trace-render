@@ -29,7 +29,7 @@ float       get_light_intensity(t_object3d *obj, t_vector3d intersect_point,
 
 	intensity = 0.0;
 	i = -1;
-	sqrt_scalar_N = sqrt(mv_scalar_mult(N, N));
+	sqrt_scalar_N = 1;
 	while (++i < scene->lights_num)
 	{
 		light = scene->lights[i];
@@ -39,14 +39,14 @@ float       get_light_intensity(t_object3d *obj, t_vector3d intersect_point,
 		{
 			if (light.type == 2)
 			{
-				light.direction = mv_minus(light.position, intersect_point);
-				light.sqrt_scalar_direction = sqrt(mv_scalar_mult(light.direction, light.direction));
-				max_distance = 1;
+				light.direction = mv_normalize(mv_minus(light.position, intersect_point));
+				max_distance = 99999;
+				light.sqrt_scalar_direction = 1.0;
 			}
 			else
-				max_distance = 999999;
+				max_distance = 99999;
 			if (check_intersect_for_shadows(intersect_point, light.direction,
-				0.001, max_distance, scene) == 0)
+				0.001, max_distance, scene, light.position) == 0)
 			{
 				intensity_tmp = light.intensity * mv_scalar_mult(N, light.direction) /
 					(sqrt_scalar_N * light.sqrt_scalar_direction);

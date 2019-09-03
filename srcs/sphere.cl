@@ -1,72 +1,54 @@
 #include "config_cl.h"
 
-int		get_intersect_sphere(t_vector3d start_ray, t_vector3d ray, t_sphere sphere,
-			float *intersect_dist, float min_distance, float scalar_ray_for_optimize)
+int		get_intersect_sphere(const t_vector3d start_ray, const t_vector3d ray, const t_object3d obj,
+			float *intersect_dist, const float min_distance)
 {
-	float		intersect_dist1;
-	float		intersect_dist2;
-	float		k1, k2, k3;
+	float		intersect_check, intersect_tmp;
+	float		a, b, c;
 	t_vector3d	OC;
 	float		discriminant;
-	float		sq_discriminant;
-	float		intersect_tmp;
 
 	intersect_tmp = *intersect_dist;
-	OC = mv_minus(start_ray, sphere.center);
-	k1 = scalar_ray_for_optimize;
-	k2 = 2 * mv_scalar_mult(OC, ray);
-	k3 = mv_scalar_mult(OC, OC) - sphere.sq_radius;
-	discriminant = k2 * k2 - 4 * k1 * k3;
-	if (discriminant < 0)
+	OC = mv_minus(start_ray, obj.center);
+	a = 1;
+	b = mv_scalar_mult(OC, ray);
+	c = mv_scalar_mult(OC, OC) - obj.sq_radius;
+	discriminant = b * b - a * c;
+	if (discriminant < 0.001)
 		return(0);
-	sq_discriminant = sqrt(discriminant);
-	intersect_dist1 = (-k2 + sq_discriminant) / (2 * k1);
-	intersect_dist2 = (-k2 - sq_discriminant) / (2 * k1);
-	if (intersect_dist1 < *intersect_dist && intersect_dist1 > min_distance)
-		*intersect_dist = intersect_dist1;
-	if (intersect_dist2 < *intersect_dist && intersect_dist2 > min_distance)
-		*intersect_dist = intersect_dist2;
+	intersect_check = (-b - sqrt(discriminant)) / a;
+	if (intersect_check < *intersect_dist && intersect_check > min_distance)
+		*intersect_dist = intersect_check;
 	if (*intersect_dist == intersect_tmp)
 		return (0);
 	return (1);
 }
 
-int		get_intersect_sphere_for_shadows(t_vector3d start_ray, t_vector3d ray,
-			t_sphere sphere, float *intersect_dist, float min_distance)
+int		get_intersect_sphere_for_shadows(const t_vector3d start_ray, const t_vector3d ray,
+			const t_object3d obj, const float max_distance, const float min_distance)
 {
-	float		intersect_dist1;
-	float		intersect_dist2;
-	float		k1, k2, k3;
+	float		intersect_check;
+	float		a, b, c;
 	t_vector3d	OC;
 	float		discriminant;
-	float		sq_discriminant;
-	float		intersect_tmp;
 
-	intersect_tmp = *intersect_dist;
-	OC = mv_minus(start_ray, sphere.center);
-	k1 = mv_scalar_mult(ray, ray);
-	k2 = 2 * mv_scalar_mult(OC, ray);
-	k3 = mv_scalar_mult(OC, OC) - sphere.sq_radius;
-	discriminant = k2 * k2 - 4 * k1 * k3;
-	if (discriminant < 0)
+	OC = mv_minus(start_ray, obj.center);
+	a = 1;
+	b = mv_scalar_mult(OC, ray);
+	c = mv_scalar_mult(OC, OC) - obj.sq_radius;
+	discriminant = b * b - a * c;
+	if (discriminant < 0.001)
 		return(0);
-	sq_discriminant = sqrt(discriminant);
-	intersect_dist1 = (-k2 + sq_discriminant) / (2 * k1);
-	intersect_dist2 = (-k2 - sq_discriminant) / (2 * k1);
-	if (intersect_dist1 < *intersect_dist && intersect_dist1 > min_distance)
-		*intersect_dist = intersect_dist1;
-	if (intersect_dist2 < *intersect_dist && intersect_dist2 > min_distance)
-		*intersect_dist = intersect_dist2;
-	if (*intersect_dist == intersect_tmp)
-		return (0);
-	return (1);
+	intersect_check = (-b - sqrt(discriminant)) / a;
+	if (intersect_check < max_distance && intersect_check > min_distance)
+		return (1);
+	return (0);
 }
 
-t_vector3d	get_normal_vector_sphere(t_sphere sphere, const t_vector3d intersection_point)
+t_vector3d	get_normal_vector_sphere(const t_object3d obj, const t_vector3d intersection_point)
 {
 	t_vector3d	N;
 
-	N = mv_minus(intersection_point, sphere.center);
-	N = mv_dev_num(N, sqrt(mv_scalar_mult(N, N)));
+	N = mv_minus(intersection_point, obj.center);
 	return (N);
 }

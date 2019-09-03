@@ -10,6 +10,6 @@ t_vector3d  get_cam_ray(int x, int y, t_canvas canvas, int width, int height)
 	canvas_cell.x = x * canvas.width / width;
     canvas_cell.y = y * canvas.height / height;
     canvas_cell.z = canvas.min_distance;
-	cam_ray = canvas_cell;
+	cam_ray = mv_normalize(canvas_cell);
     return (cam_ray);
 }

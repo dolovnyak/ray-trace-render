@@ -5,15 +5,21 @@ FLAGS = -c -O3
 MLXFLAGS = -lmlx -framework OpenGL -framework OpenCL -framework AppKit -O3
 
 SOURCES = initialization.c \
+		  scene_mario_eden.c \
+		  scene_too_many_problems.c \
 		  initialization_cl.c \
+		  utilits_for_initialization_cl.c \
 		  main.c \
 		  create_objects.c \
 		  create_lights.c \
 		  keyboard_events.c \
-		  mouse_events.c
+		  mouse_events.c \
+		  scene_s.c \
+		  scene_s2.c
 
 UTILITS = color.c \
-		  math_vec.c
+		  math_vec1.c \
+		  math_vec2.c
 
 INCLUDES = $(addprefix -I, ./includes)
 

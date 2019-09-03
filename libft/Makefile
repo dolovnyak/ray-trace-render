@@ -82,7 +82,22 @@ SRC = ft_atoi.c \
 	  ft_restrsub.c \
 	  ft_strnewsetchar.c \
 	  ft_ltoa_base.c \
-	  ft_utoa_base.c
+	  ft_utoa_base.c \
+	  char_and_nonstandard_output.c \
+	  get_fraction.c \
+	  int_output.c \
+	  output_processing_uob.c \
+	  float_output.c \
+	  get_integer.c \
+	  other_and_bonus.c \
+	  output_processing_x.c \
+	  ft_printf.c \
+	  help_functions_for_float.c \
+	  output_processing_di.c \
+	  processing_functions.c \
+	  get_float_components.c \
+	  help_functions_for_int.c \
+	  output_processing_f.c
 
 OBJ=$(SRC:.c=.o)
 %.c : %.o

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sbecker <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: sbosmer <sbosmer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/22 18:14:31 by sbecker           #+#    #+#             */
-/*   Updated: 2019/05/02 02:15:12 by sbecker          ###   ########.fr       */
+/*   Updated: 2019/07/04 16:45:31 by sbecker          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,17 @@ void	run_render(t_conf *conf, cl_mem *mem_img,
 	err |= clSetKernelArg(conf->cl.kernel, 6, sizeof(cl_mem), mem_objects);
 	err |= clSetKernelArg(conf->cl.kernel, 7, sizeof(cl_mem), mem_lights);
 	if (err != 0)
-		printf("set kernel arg - error\n");
+		ft_printf("set kernel arg - error\n");
 	global_size = conf->mlx.width * conf->mlx.height;
 	err = clEnqueueNDRangeKernel(conf->cl.queue, conf->cl.kernel, 1, NULL,
 			&global_size, NULL, 0, NULL, NULL);
 	if (err != 0)
-		printf("NDR - error\n");
+		ft_printf("NDR - error\n");
 	err = clEnqueueReadBuffer(conf->cl.queue, *mem_img, CL_TRUE, 0,
 			conf->mlx.size_line * conf->mlx.height,
 			conf->mlx.img_data, 0, NULL, NULL);
 	if (err != 0)
-		printf("read buffer - error\n");
+		ft_printf("read buffer - error\n");
 }
 
 void	get_mem_for_render(t_conf *conf, cl_mem *mem_img,
@@ -57,17 +57,7 @@ void	get_mem_for_render(t_conf *conf, cl_mem *mem_img,
 	err = clEnqueueWriteBuffer(conf->cl.queue, *mem_lights, CL_TRUE, 0,
 			sizeof(t_lights) * conf->lights_num, conf->lights, 0, NULL, NULL);
 	if (err != 0)
-		printf("create buffer - error\n");
-}
-
-void	get_math_optimization(t_conf *conf)
-{
-	conf->canvas.cos_x_rotate = cos(conf->canvas.x_rotation);
-	conf->canvas.sin_x_rotate = sin(conf->canvas.x_rotation);
-	conf->canvas.cos_y_rotate = cos(conf->canvas.y_rotation);
-	conf->canvas.sin_y_rotate = sin(conf->canvas.y_rotation);
-	conf->canvas.cos_z_rotate = cos(conf->canvas.z_rotation);
-	conf->canvas.sin_z_rotate = sin(conf->canvas.z_rotation);
+		ft_printf("create buffer - error\n");
 }
 
 int		refresh(t_conf *conf)
@@ -81,7 +71,12 @@ int		refresh(t_conf *conf)
 		conf->canvas.z_rotation += 0.05;
 	if (conf->flag_rotation_z_right == 1)
 		conf->canvas.z_rotation -= 0.05;
-	get_math_optimization(conf);
+	conf->canvas.cos_x_rotate = cos(conf->canvas.x_rotation);
+	conf->canvas.sin_x_rotate = sin(conf->canvas.x_rotation);
+	conf->canvas.cos_y_rotate = cos(conf->canvas.y_rotation);
+	conf->canvas.sin_y_rotate = sin(conf->canvas.y_rotation);
+	conf->canvas.cos_z_rotate = cos(conf->canvas.z_rotation);
+	conf->canvas.sin_z_rotate = sin(conf->canvas.z_rotation);
 	get_mem_for_render(conf, &mem_img, &mem_objects, &mem_lights);
 	run_render(conf, &mem_img, &mem_objects, &mem_lights);
 	mlx_clear_window(conf->mlx.mlx, conf->mlx.win);
@@ -90,13 +85,39 @@ int		refresh(t_conf *conf)
 	return (0);
 }
 
-int		main(void)
+int		validation(int argc, char **argv, t_conf *conf)
+{
+	if (argc != 2)
+	{
+		ft_printf("input \"mario_eden\" or \"zen\" ");
+		ft_printf("or \"too_many_problems\" or \"mirror_hell\"\n");
+		return (0);
+	}
+	if (ft_strequ(argv[1], "mario_eden"))
+		scene_mario_eden(conf);
+	else if (ft_strequ(argv[1], "zen"))
+		scene_1(conf);
+	else if (ft_strequ(argv[1], "too_many_problems"))
+		scene_too_many_problems(conf);
+	else if (ft_strequ(argv[1], "mirror_hell"))
+		scene_2(conf);
+	else
+	{
+		ft_printf("input \"mario_eden\" or \"zen\" ");
+		ft_printf("or \"too_many_problems\" or \"mirror_hell\"\n");
+		return (0);
+	}
+	return (1);
+}
+
+int		main(int argc, char **argv)
 {
 	t_conf		conf;
 
+	if (validation(argc, argv, &conf) == 0)
+		return (0);
 	initialization_cl(&conf.cl);
 	initialization_canvas(&conf.canvas);
-	initialization_scene(&conf);
 	initialization_mlx(&conf.mlx);
 	refresh(&conf);
 	mlx_hook(conf.mlx.win, 2, 0, &key_press, &conf);

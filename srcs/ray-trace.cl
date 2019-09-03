@@ -1,23 +1,39 @@
 #include "config_cl.h"
 
-t_vector3d  get_normal_vector(t_object3d *obj, t_vector3d intersect_point)
+t_vector3d  get_normal_vector(const t_vector3d start_ray, const t_vector3d ray,
+				t_object3d *obj, const t_vector3d intersect_point, const float intersect_dist)
 {
     if (obj->type == 1)
-        return (get_normal_vector_sphere(obj->sphere, intersect_point));
+        return (get_normal_vector_sphere(*obj, intersect_point));
+	else if (obj->type == 2)
+			return (get_normal_vector_cylinder(start_ray, ray, *obj, intersect_point, intersect_dist));
+	else if (obj->type == 3)
+        return (obj->normal);
+	else if (obj->type == 7)
+		return (get_normal_vector_cone(start_ray, ray, *obj, intersect_dist));
     return (mv_get_vector3d(0, 0, 0));
 }
 
 int     get_intersect(t_vector3d *start_ray, t_vector3d *ray, t_object3d *obj,
-			float *intersect_dist, float min_distance, float scalar_ray)
+			float *intersect_dist, float min_distance)
 {
 	if (obj->type == 1)
-		return (get_intersect_sphere(*start_ray, *ray, obj->sphere, intersect_dist,
-					min_distance, scalar_ray));
+		return (get_intersect_sphere(*start_ray, *ray, *obj, intersect_dist,
+					min_distance));
+	else if (obj->type == 2)
+		return (get_intersect_cylinder(*start_ray, *ray, *obj, intersect_dist,
+					min_distance));
+	else if (obj->type == 3)
+		return (get_intersect_plane(*start_ray, *ray, *obj, intersect_dist,
+					min_distance));
+	else if (obj->type == 7)
+		return (get_intersect_cone(*start_ray, *ray, *obj, intersect_dist,
+					min_distance));
 	return (0);
 }
 
 float       find_intersect(t_vector3d *start_ray, t_vector3d *ray,
-				t_scene *scene, t_object3d *closest_obj, float scalar_ray)
+				t_scene *scene, t_object3d *closest_obj)
 {
 	t_object3d object;
 	int         i;
@@ -28,10 +44,10 @@ float       find_intersect(t_vector3d *start_ray, t_vector3d *ray,
 	while (++i < scene->objects_num)
 	{
 		object = scene->objects[i];
-		if (get_intersect(start_ray, ray, &object, &intersect_dist, scene->min_distance, scalar_ray))
+		if (get_intersect(start_ray, ray, &object, &intersect_dist, 0.001))
 			*closest_obj = object;
 	}
-	if (intersect_dist > scene->min_distance && intersect_dist < scene->max_distance)
+	if (intersect_dist > 0.001 && intersect_dist < scene->max_distance)
 		return (intersect_dist);
 	else
 		return (0);
@@ -49,7 +65,6 @@ t_color     ray_trace(t_vector3d start_ray, t_vector3d ray, t_scene *scene)
 	float       intersect_dist;
 	t_object3d  closest_obj;
 	t_vector3d	normal;
-	float		scal_ray_for_optimize;
 	t_reflection reflection[DEPTH + 1];
 	int			count;
 	int			i;
@@ -59,11 +74,10 @@ t_color     ray_trace(t_vector3d start_ray, t_vector3d ray, t_scene *scene)
 	while (++i <= DEPTH)
 	{
 		++count;
-		scal_ray_for_optimize = mv_scalar_mult(ray, ray);
-		if ((intersect_dist = find_intersect(&start_ray, &ray, scene, &closest_obj, scal_ray_for_optimize)))
+		if ((intersect_dist = find_intersect(&start_ray, &ray, scene, &closest_obj)))
 		{
 			intersect_point = mv_plus(start_ray, mv_mult_num(ray, intersect_dist));
-			normal = get_normal_vector(&closest_obj, intersect_point);
+			normal = mv_normalize(get_normal_vector(start_ray, ray, &closest_obj, intersect_point, intersect_dist));
 			color = rgb_mult_num(closest_obj.color,
 					get_light_intensity(&closest_obj, intersect_point, scene, ray, normal));
 			reflection[i].local_color = color;

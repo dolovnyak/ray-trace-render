@@ -2,7 +2,7 @@ implemented:
 ============
 Primitives: sphere, plane, cylinder, cone.
 ------------
-Lights: poin, directional, Ambient.
+Lights: point, directional, Ambient.
 ------------
 Shadows.
 ------------

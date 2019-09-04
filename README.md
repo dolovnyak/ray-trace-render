@@ -1,18 +1,18 @@
-Реализовано:
+implemented:
 ============
-Примитивы: сфера, плоскость, цилиндр, конус.
+Primitives: sphere, plane, cylinder, cone.
 ------------
-Источники света: точечный, направленный, диффузный.
+Lights: poin, directional, Ambient.
 ------------
-Тени.
+Shadows.
 ------------
-Зеркальность.
+Mirror reflection.
 ------------
-Блики.
+Flare.
 ------------
-Примитивное движение и вращение камеры.
+Primitive camera movement and rotation.
 ------------
-Распараллелено с помощью OpenCL.
+Parallelized via OpenCL.
 ------------
 
 ![Image 1](https://github.com/dolovnyak/ray-trace-render/raw/master/screenshots/Screen%20Shot%202019-09-03%20at%2020.14.44.png)

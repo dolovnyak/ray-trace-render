@@ -1,4 +1,4 @@
-NAME = RTv1
+NAME = ray_trace
 
 FLAGS = -c -O3
 

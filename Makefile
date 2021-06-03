@@ -2,7 +2,7 @@ NAME = ray_trace
 
 FLAGS = -c -O3
 
-MLXFLAGS = -lmlx -framework OpenGL -framework OpenCL -framework AppKit -O3
+MLX = -L ./minilibx_macos -lmlx -framework OpenGL -framework OpenCL -framework AppKit -O3
 
 SOURCES = initialization.c \
 		  scene_mario_eden.c \
@@ -21,7 +21,7 @@ UTILITS = color.c \
 		  math_vec1.c \
 		  math_vec2.c
 
-INCLUDES = $(addprefix -I, ./includes)
+INCLUDES = -I ./includes -I minilibx_macos
 
 LIB = libft/libft.a
 
@@ -37,14 +37,10 @@ OBJS = $(addprefix $(DIR_O)/,$(SOURCES:.c=.o))
 
 UTLS = $(addprefix $(DIR_O)/,$(UTILITS:.c=.o))
 
-all: $(LIB) $(NAME)
-
-$(LIB):
-			@echo "\x1b[35;01mCompilation Lib and binary\x1b[32;01m"
-			@make -C ./libft
+all: make_libs $(NAME)
 
 $(NAME):	$(OBJS) $(UTLS)
-			gcc -I /usr/local/include $(OBJS) $(UTLS) $(LIB) -L /usr/local/lib/ $(MLXFLAGS) -o $(NAME)
+			gcc $(OBJS) $(UTLS) $(LIB) $(MLX) -o $(NAME)
 
 $(OBJS):	$(DIR_O)/%.o: $(DIR_S)/%.c includes/config.h
 			@mkdir -p $(DIR_O)
@@ -54,14 +50,21 @@ $(UTLS):	$(DIR_O)/%.o: $(DIR_U)/%.c includes/config.h
 			@mkdir -p $(DIR_O)
 			gcc $(FLAGS) $(INCLUDES) -o $@ $<
 
+make_libs:
+			@echo "\x1b[35;01mCompilation Libs\x1b[32;01m"
+			@make -C ./libft
+			@make -C ./minilibx_macos
+
 clean:
 			@echo "\x1b[36;01mDeliting .o files\x1b[31;01m"
 			@/bin/rm -rf $(DIR_O)
 			@make clean --directory ./libft
+			@make -C ./minilibx_macos/ clean
 
 fclean: clean
 			@echo "\x1b[36;01mDeliting execute file\x1b[31;01m"
 			@/bin/rm -f $(NAME)
 			@make fclean --directory ./libft
+			@make -C ./minilibx_macos/ clean
 
 re: fclean all

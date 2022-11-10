@@ -1,6 +1,6 @@
 # ray-trace-render-mini
 
-## MacOS - [![Build Status](https://www.travis-ci.com/dolovnyak/ray-trace-render-mini.svg?branch=master)](https://www.travis-ci.com/dolovnyak/ray-trace-render-mini)
+## MacOS - ![Build](https://github.com/dolovnyak/ray-trace-render-mini/actions/workflows/build.yml/badge.svg?branch=master)
 
 Build and run on `MacOS`
 --------
